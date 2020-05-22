@@ -8,12 +8,13 @@ headers = ['ID', 'Diagnosis', 'radius', 'texture', 'perimeter', 'area', 'smoothn
 
 def importDataset():
     data = pd.read_csv('./dataset/wdbc.data', sep=",", header=None)
-    # data = data.reset_index(drop=True)
+    data = data.reset_index(drop=True)
     # data = data.fillna(0)
     # data.describe()
 
     data_cp = data.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]].copy()
     data_cp.columns = headers
+    data_cp = data_cp.reset_index(drop=True)
     print(data_cp)
 
 
