@@ -16,7 +16,7 @@ import seaborn as sns
 
 # ################################## Develop Mode #######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
-debug = True
+debug = False
 plot_graphics = False
 # ################################## Directorias #######################################################################
 # URL da BD
@@ -164,7 +164,7 @@ if plot_graphics:
 # Y é a coluna diagnosis
 # X são todas as outras colunas
 # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-X = randomized_data.iloc[:, 2:31].values
+X = randomized_data.iloc[:, 2:11].values
 Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
@@ -174,3 +174,53 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, r
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
+
+print(X_train)
+
+def models(X_train, Y_train):
+    # Logistic Regression
+    from sklearn.linear_model import LogisticRegression
+    log = LogisticRegression(random_state=0)
+    log.fit(X_train, Y_train)
+
+    #Decision Tree
+    from sklearn.tree import DecisionTreeClassifier
+    tree = DecisionTreeClassifier(criterion='entropy', random_state=0)
+    tree.fit(X_train, Y_train)
+
+    #Random Forest Classifier
+    from sklearn.ensemble import RandomForestClassifier
+    forest = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
+    forest.fit(X_train, Y_train)
+
+    #Model Accuracy sobre os dados de treino
+    print('[0] Logistic Regression Training Accuracy:', log.score(X_train, Y_train))
+    print('[1] Decision Tree Classifier Training Accuracy:', tree.score(X_train, Y_train))
+    print('[2] Random Forest Classifier Training Accuracy:', forest.score(X_train, Y_train))
+
+    return log, tree, forest
+
+# Correr todos os modelos
+
+model = models(X_train, Y_train)
+
+print(model)
+
+#teste da accuracy do model no data test com a confusion matrix
+#[TP][FP]
+#[FN][TN]
+from sklearn.metrics import confusion_matrix
+for i in range(len(model)):
+    print('Model', i)
+    cm = confusion_matrix(Y_test, model[i].predict(X_test))
+    print(cm)
+    TP = cm[0][0]
+    TN = cm[1][1]
+    FN = cm[1][0]
+    FP = cm[0][1]
+    print('Testing Accuracy', (TP +TN)/(TP + TN + FN + FP))
+    print()
+
+#Outra maneira de receber as metricas dos modelos
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
