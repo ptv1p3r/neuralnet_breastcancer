@@ -5,6 +5,7 @@ import os
 import os.path
 from os import path
 
+# ################################## Directorias #######################################################################
 # URL da BD
 data_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
 
@@ -16,6 +17,10 @@ file_name = "wdbc.data"
 
 # Nome que vai ser dado a BD
 data_name = 'wdbc.data'
+
+# ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
+# Set to True to shuffle the data before you split into training and # test sets
+do_shuffle = True
 
 
 # Define corretamente os caminhos do dataset
@@ -38,4 +43,16 @@ my_data = pd.read_csv(database_path, delimiter=',')
 
 # Confirmar os dados
 print(my_data)
+
+# Os dados podem ter algum tipo de ordenação e isso pode afetar o treino
+# Por exemplo se estiverem ordenados por tamanho e começar no Benigno para o Maligno
+# Podemos estár a dividir para o treino os Benignos e para o teste apenas os Malignos
+# Por isso pode ser do interesse baralhar os dados ou não
+if do_shuffle:
+    randomized_data = my_data.reindex(np.random.permutation(my_data.index))
+else:
+    randomized_data = my_data
+
+# DEUBUG de confirmação
+print(randomized_data)
 
