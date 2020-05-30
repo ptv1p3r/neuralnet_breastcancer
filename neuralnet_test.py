@@ -16,7 +16,7 @@ import seaborn as sns
 
 # ################################## Develop Mode #######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
-debug = True
+debug = False
 plot_graphics = False
 # ################################## Directorias #######################################################################
 # URL da BD
@@ -164,7 +164,7 @@ if plot_graphics:
 # Y é a coluna diagnosis
 # X são todas as outras colunas
 # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-X = randomized_data.iloc[:, 2:31].values
+X = randomized_data.iloc[:, 2:11].values
 Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
@@ -201,6 +201,7 @@ def models(X_train, Y_train):
     return log, tree, forest
 
 # Correr todos os modelos
+
 model = models(X_train, Y_train)
 
 print(model)
@@ -221,3 +222,5 @@ for i in range(len(model)):
     print()
 
 #Outra maneira de receber as metricas dos modelos
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
