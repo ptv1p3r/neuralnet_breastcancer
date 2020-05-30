@@ -4,16 +4,16 @@ import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 
-import os
 import os.path
 from os import path
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
 
 # Ver estatisticas
 import seaborn as sns
 
-# ################################## Develop Mode #######################################################################
+# ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
 debug = True
 plot_graphics = False
@@ -33,6 +33,8 @@ data_name = 'wdbc.data'
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
 do_shuffle = False
+test_size = 0.25
+# ######################################################################################################################
 
 # Define corretamente os caminhos do dataset
 app_root = os.path.dirname(os.path.abspath(__file__))
@@ -140,7 +142,6 @@ if plot_graphics:
     # Azul é o valor 0(B)
     # Laranja é o valor 1(M)
     sns.pairplot(randomized_data.iloc[:, 1:11], hue='diagnosis')
-    plt.show()
 
 
 if debug:
@@ -150,3 +151,20 @@ if debug:
     print("")
     print(randomized_data.iloc[:, 1:12].corr())
     print("")
+
+
+if plot_graphics:
+    plt.figure(figsize=(10, 10))
+    sns.heatmap(randomized_data.iloc[:, 1:12].corr(), annot=True, fmt='.0%')
+    plt.show()
+
+
+# Divide os dados em array e em diferentes datasets Y e X
+# Y é a coluna diagnosis
+# X são todas as outras colunas
+# Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
+X = randomized_data.iloc[:, 2:31].values
+Y = randomized_data.iloc[:, 1].values
+
+# Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=0)
