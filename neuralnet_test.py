@@ -164,7 +164,7 @@ if plot_graphics:
 # Y é a coluna diagnosis
 # X são todas as outras colunas
 # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-X = randomized_data.iloc[:, 2:11].values
+X = randomized_data.iloc[:, 2:31].values
 Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
@@ -174,8 +174,6 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, r
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
-
-print(X_train)
 
 def models(X_train, Y_train):
     # Logistic Regression
@@ -209,6 +207,7 @@ print(model)
 #teste da accuracy do model no data test com a confusion matrix
 #[TP][FP]
 #[FN][TN]
+
 from sklearn.metrics import confusion_matrix
 for i in range(len(model)):
     print('Model', i)
@@ -218,9 +217,15 @@ for i in range(len(model)):
     TN = cm[1][1]
     FN = cm[1][0]
     FP = cm[0][1]
-    print('Testing Accuracy', (TP +TN)/(TP + TN + FN + FP))
+    print('Testing Accuracy', (TP + TN)/(TP + TN + FN + FP))
     print()
 
 #Outra maneira de receber as metricas dos modelos
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
+
+for i in range(len(model)):
+    print('Model', i)
+    print(classification_report(Y_test, model[i].predict(X_test)))
+    print(accuracy_score(Y_test, model[i].predict(X_test)))
+    print()
