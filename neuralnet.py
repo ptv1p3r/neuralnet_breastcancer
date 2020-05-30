@@ -4,6 +4,7 @@ import numpy as np
 from numpy import array
 import matplotlib.pyplot as plt
 import pandas as pd
+
 headers = ['ID', 'Diagnosis', 'radius', 'texture', 'perimeter', 'area', 'smoothness', 'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension']
 
 
@@ -29,5 +30,3 @@ def libs_version():
     print(tf.__version__)
     print(np.__version__)
     print(pd.__version__)
-
-
