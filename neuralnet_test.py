@@ -9,11 +9,12 @@ from os import path
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 # Ver estatisticas
 import seaborn as sns
 
-# ################################## Develop Mode ######################################################################
+# ################################## Develop Mode #######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
 debug = True
 plot_graphics = False
@@ -168,3 +169,8 @@ Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=0)
+
+# Escala os dados para criar uma maior correlação entre eles
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.fit_transform(X_test)
