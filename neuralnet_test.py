@@ -225,5 +225,5 @@ for i in range(len(model)):
 # Faz um print da prediction do Random Forest Classifier Model
 pred = model[2].predict(X_test)
 print(pred)
-print()
+print('')
 print(Y_test)
