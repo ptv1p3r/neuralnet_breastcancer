@@ -38,6 +38,10 @@ file_name = "wdbc.data"
 # Nome que vai ser dado a BD
 data_name = 'wdbc.data'
 
+# Nome do diretorio do model
+models_path_name = 'models'
+
+
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
 do_shuffle = False
@@ -48,6 +52,9 @@ test_size = 0.25
 app_root = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(app_root, dataset_path_name)
 database_path = os.path.join(dataset_path, data_name)
+
+# Define corretamente os caminhos dos modelos
+models_path = os.path.join(app_root, models_path_name)
 
 # verifica se a pasta dataset existe, se não, então é criada
 if not path.exists(dataset_path):
@@ -254,8 +261,21 @@ history = model.fit(X_train, Y_train, epochs=2000, validation_split=0.15, verbos
 
 history_dict = history.history
 
+
 # Avaliação do Modelo Sequencial
 print('')
 loss, acc = model.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
+
+# Guardar o modelo feito
+model.save(models_path)
+
+# Apaga o modelo anterior para testar
+del model
+
+modelTest = tf.keras.models.load_model(models_path)
+
+loss, acc = modelTest.evaluate(X_test, Y_test, verbose=2)
 print("Test loss: ", loss)
 print("Test accuracy: ", acc)
