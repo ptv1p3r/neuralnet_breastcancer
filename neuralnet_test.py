@@ -1,12 +1,17 @@
+import os.path
+from os import path
+# ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
+# '0' 'DEBUG' [Default] Print all messages
+# '1' 'INFO' Filter out INFO messages
+# '2' 'WARNING' Filter out INFO & WARNING messages
+# '3' 'ERROR' Filter out all messages
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 import tensorflow as tf
-
+# ################################## Develop Mode ######################################################################
 import pandas as pd
 import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
-
-import os.path
-from os import path
 
 from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
@@ -16,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 # Ver estatisticas
 import seaborn as sns
 
-# ################################## Develop Mode #######################################################################
+# ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
 debug = False
 plot_graphics = False
@@ -153,7 +158,7 @@ if plot_graphics:
 # Y é a coluna diagnosis
 # X são todas as outras colunas
 # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-X = randomized_data.iloc[:, 2:11].values
+X = randomized_data.iloc[:, 2:31].values
 Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
@@ -165,26 +170,26 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
 
 
-def models(X_train, Y_train):
+def models(x_train, y_train):
     # Logistic Regression
     from sklearn.linear_model import LogisticRegression
     log = LogisticRegression(random_state=0)
-    log.fit(X_train, Y_train)
+    log.fit(x_train, y_train)
 
     # Decision Tree
     from sklearn.tree import DecisionTreeClassifier
     tree = DecisionTreeClassifier(criterion='entropy', random_state=0)
-    tree.fit(X_train, Y_train)
+    tree.fit(x_train, y_train)
 
     # Random Forest Classifier
     from sklearn.ensemble import RandomForestClassifier
     forest = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-    forest.fit(X_train, Y_train)
+    forest.fit(x_train, y_train)
 
     # Model Accuracy sobre os dados de treino
-    print('[0] Logistic Regression Training Accuracy:', log.score(X_train, Y_train))
-    print('[1] Decision Tree Classifier Training Accuracy:', tree.score(X_train, Y_train))
-    print('[2] Random Forest Classifier Training Accuracy:', forest.score(X_train, Y_train))
+    print('[0] Logistic Regression Training Accuracy:', log.score(x_train, y_train))
+    print('[1] Decision Tree Classifier Training Accuracy:', tree.score(x_train, y_train))
+    print('[2] Random Forest Classifier Training Accuracy:', forest.score(x_train, y_train))
 
     return log, tree, forest
 
@@ -227,3 +232,30 @@ pred = model[2].predict(X_test)
 print(pred)
 print('')
 print(Y_test)
+print('###############################################################################################################')
+
+# TODO: Passar isto para função e organizar melhor o modelo sequencial de maneira a que possamos alterar os parametros mais facilmente
+# Define a "shallow" logistic regression model
+# Input layer é de 29 neuronios isto corresponde as features do dataset
+# isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
+# cada hiden layer é ativada pela afunção de ativação  'relu'
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(15, input_shape=(29,), activation='relu'))
+# isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
+model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
+
+# Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
+earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1, mode='auto')
+
+# Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
+history = model.fit(X_train, Y_train, epochs=2000, validation_split=0.15, verbose=0, callbacks=[earlystopper])
+
+history_dict = history.history
+
+# Avaliação do Modelo
+print('')
+loss, acc = model.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
