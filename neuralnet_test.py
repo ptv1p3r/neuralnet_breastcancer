@@ -1,12 +1,19 @@
+import os.path
+from os import path
+# ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
+# '0' 'DEBUG' [Default] Print all messages
+# '1' 'INFO' Filter out INFO messages
+# '2' 'WARNING' Filter out INFO & WARNING messages
+# '3' 'ERROR' Filter out all messages
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 import tensorflow as tf
+# ################################## Develop Mode ######################################################################
 import pandas as pd
 import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 
-import os.path
-from os import path
-
+from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -14,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 # Ver estatisticas
 import seaborn as sns
 
-# ################################## Develop Mode #######################################################################
+# ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
 debug = False
 plot_graphics = False
@@ -31,6 +38,10 @@ file_name = "wdbc.data"
 # Nome que vai ser dado a BD
 data_name = 'wdbc.data'
 
+# Nome do diretorio do model
+models_path_name = 'models'
+
+
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
 do_shuffle = False
@@ -42,6 +53,9 @@ app_root = os.path.dirname(os.path.abspath(__file__))
 dataset_path = os.path.join(app_root, dataset_path_name)
 database_path = os.path.join(dataset_path, data_name)
 
+# Define corretamente os caminhos dos modelos
+models_path = os.path.join(app_root, models_path_name)
+
 # verifica se a pasta dataset existe, se não, então é criada
 if not path.exists(dataset_path):
     os.makedirs(dataset_path)
@@ -51,7 +65,6 @@ if not path.exists(database_path) or not path.exists(database_path):
     # Faz o download do data set do URL da BD original e guarda no diretorio com o nome da variavel dataset_path_name
     # isto deixa a app mais dinamica para que no futuro possamos trabalhar outros dados
     file_name = tf.keras.utils.get_file(fname=database_path, origin=data_url)
-
 
 # Load dos dados da nossa DB
 my_data = pd.read_csv(database_path, delimiter=',')
@@ -70,7 +83,6 @@ my_data.columns = ['id', 'diagnosis', 'radius', 'texture', 'perimeter', 'area', 
                    'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
                    'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
 
-
 if debug:
     # Confirmar as colunas se estão corretas
     print("")
@@ -78,7 +90,6 @@ if debug:
     print("")
     print(my_data)
     print("")
-
 
 # Os dados podem ter algum tipo de ordenação e isso pode afetar o treino
 # Por exemplo se estiverem ordenados por tamanho e começar no Benigno para o Maligno
@@ -89,14 +100,12 @@ if do_shuffle:
 else:
     randomized_data = my_data
 
-
 if debug:
     print("")
     print("========== Shuffle dos dados ==========")
     print("")
     print(randomized_data)
     print("")
-
 
 if debug:
     print("")
@@ -105,12 +114,10 @@ if debug:
     print(randomized_data.isna().sum())
     print("")
 
-
 if plot_graphics:
     # Grafico do n° de cancros Benignos ou Malignos
     # Isto é apresentado quando corrermos o comando plt.show()
     sns.countplot(randomized_data['diagnosis'], label='count')
-
 
 # perceber o tipo de campos que temos no dataset
 if debug:
@@ -120,13 +127,11 @@ if debug:
     print(randomized_data.dtypes)
     print("")
 
-
 # Index 1 é referente a coluna diagnosis, os ":" é referente a todas as linhas
 # Transformo os valored de M no valor 1 e B no valor 0
 # e volto a guardar a coluna
 labelencoder_Y = LabelEncoder()
 randomized_data.iloc[:, 1] = labelencoder_Y.fit_transform(randomized_data.iloc[:, 1].values)
-
 
 if debug:
     print("")
@@ -134,7 +139,6 @@ if debug:
     print("")
     print(randomized_data.iloc[:, 1])
     print("")
-
 
 if plot_graphics:
     # Cria um par plot da coluna 1 a 6 sabendo que começa no 0
@@ -144,7 +148,6 @@ if plot_graphics:
     # Laranja é o valor 1(M)
     sns.pairplot(randomized_data.iloc[:, 1:11], hue='diagnosis')
 
-
 if debug:
     # Mostra quais colunas interferem com quais colunas
     print("")
@@ -153,12 +156,10 @@ if debug:
     print(randomized_data.iloc[:, 1:12].corr())
     print("")
 
-
 if plot_graphics:
     plt.figure(figsize=(10, 10))
     sns.heatmap(randomized_data.iloc[:, 1:12].corr(), annot=True, fmt='.0%')
     plt.show()
-
 
 # Divide os dados em array e em diferentes datasets Y e X
 # Y é a coluna diagnosis
@@ -175,28 +176,30 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
 
-def models(X_train, Y_train):
+
+def models(x_train, y_train):
     # Logistic Regression
     from sklearn.linear_model import LogisticRegression
     log = LogisticRegression(random_state=0)
-    log.fit(X_train, Y_train)
+    log.fit(x_train, y_train)
 
-    #Decision Tree
+    # Decision Tree
     from sklearn.tree import DecisionTreeClassifier
     tree = DecisionTreeClassifier(criterion='entropy', random_state=0)
-    tree.fit(X_train, Y_train)
+    tree.fit(x_train, y_train)
 
-    #Random Forest Classifier
+    # Random Forest Classifier
     from sklearn.ensemble import RandomForestClassifier
     forest = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
-    forest.fit(X_train, Y_train)
+    forest.fit(x_train, y_train)
 
-    #Model Accuracy sobre os dados de treino
-    print('[0] Logistic Regression Training Accuracy:', log.score(X_train, Y_train))
-    print('[1] Decision Tree Classifier Training Accuracy:', tree.score(X_train, Y_train))
-    print('[2] Random Forest Classifier Training Accuracy:', forest.score(X_train, Y_train))
+    # Model Accuracy sobre os dados de treino
+    print('[0] Logistic Regression Training Accuracy:', log.score(x_train, y_train))
+    print('[1] Decision Tree Classifier Training Accuracy:', tree.score(x_train, y_train))
+    print('[2] Random Forest Classifier Training Accuracy:', forest.score(x_train, y_train))
 
     return log, tree, forest
+
 
 # Correr todos os modelos
 
@@ -204,11 +207,12 @@ model = models(X_train, Y_train)
 
 print(model)
 
-#teste da accuracy do model no data test com a confusion matrix
-#[TP][FP]
-#[FN][TN]
+# teste da accuracy do model no data test com a confusion matrix
+# [TP][FP]
+# [FN][TN]
 
 from sklearn.metrics import confusion_matrix
+
 for i in range(len(model)):
     print('Model', i)
     cm = confusion_matrix(Y_test, model[i].predict(X_test))
@@ -217,10 +221,10 @@ for i in range(len(model)):
     TN = cm[1][1]
     FN = cm[1][0]
     FP = cm[0][1]
-    print('Testing Accuracy', (TP + TN)/(TP + TN + FN + FP))
+    print('Testing Accuracy', (TP + TN) / (TP + TN + FN + FP))
     print()
 
-#Outra maneira de receber as metricas dos modelos
+# Outra maneira de receber as metricas dos modelos
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
@@ -229,3 +233,49 @@ for i in range(len(model)):
     print(classification_report(Y_test, model[i].predict(X_test)))
     print(accuracy_score(Y_test, model[i].predict(X_test)))
     print()
+
+# Faz um print da prediction do Random Forest Classifier Model
+pred = model[2].predict(X_test)
+print(pred)
+print('')
+print(Y_test)
+print('###############################################################################################################')
+
+# TODO: Passar isto para função e organizar melhor o modelo sequencial de maneira a que possamos alterar os parametros mais facilmente
+# Define a "shallow" logistic regression model
+# Input layer é de 29 neuronios isto corresponde as features do dataset
+# isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
+# cada hiden layer é ativada pela afunção de ativação  'relu'
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(15, input_shape=(29,), activation='relu'))
+# isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
+model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
+
+# Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
+earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1, mode='auto')
+
+# Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
+history = model.fit(X_train, Y_train, epochs=2000, validation_split=0.15, verbose=0, callbacks=[earlystopper])
+
+history_dict = history.history
+
+
+# Avaliação do Modelo Sequencial
+print('')
+loss, acc = model.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
+
+# Guardar o modelo feito
+model.save(models_path)
+
+# Apaga o modelo anterior para testar
+del model
+
+modelTest = tf.keras.models.load_model(models_path)
+
+loss, acc = modelTest.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
