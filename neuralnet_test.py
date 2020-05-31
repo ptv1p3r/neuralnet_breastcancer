@@ -254,7 +254,7 @@ history = model.fit(X_train, Y_train, epochs=2000, validation_split=0.15, verbos
 
 history_dict = history.history
 
-# Avaliação do Modelo
+# Avaliação do Modelo Sequencial
 print('')
 loss, acc = model.evaluate(X_test, Y_test, verbose=2)
 print("Test loss: ", loss)
