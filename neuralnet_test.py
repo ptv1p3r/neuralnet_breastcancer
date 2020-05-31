@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -7,6 +8,7 @@ from matplotlib import pyplot as plt
 import os.path
 from os import path
 
+from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -52,7 +54,6 @@ if not path.exists(database_path) or not path.exists(database_path):
     # isto deixa a app mais dinamica para que no futuro possamos trabalhar outros dados
     file_name = tf.keras.utils.get_file(fname=database_path, origin=data_url)
 
-
 # Load dos dados da nossa DB
 my_data = pd.read_csv(database_path, delimiter=',')
 
@@ -70,7 +71,6 @@ my_data.columns = ['id', 'diagnosis', 'radius', 'texture', 'perimeter', 'area', 
                    'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
                    'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
 
-
 if debug:
     # Confirmar as colunas se estão corretas
     print("")
@@ -78,7 +78,6 @@ if debug:
     print("")
     print(my_data)
     print("")
-
 
 # Os dados podem ter algum tipo de ordenação e isso pode afetar o treino
 # Por exemplo se estiverem ordenados por tamanho e começar no Benigno para o Maligno
@@ -89,14 +88,12 @@ if do_shuffle:
 else:
     randomized_data = my_data
 
-
 if debug:
     print("")
     print("========== Shuffle dos dados ==========")
     print("")
     print(randomized_data)
     print("")
-
 
 if debug:
     print("")
@@ -105,12 +102,10 @@ if debug:
     print(randomized_data.isna().sum())
     print("")
 
-
 if plot_graphics:
     # Grafico do n° de cancros Benignos ou Malignos
     # Isto é apresentado quando corrermos o comando plt.show()
     sns.countplot(randomized_data['diagnosis'], label='count')
-
 
 # perceber o tipo de campos que temos no dataset
 if debug:
@@ -120,13 +115,11 @@ if debug:
     print(randomized_data.dtypes)
     print("")
 
-
 # Index 1 é referente a coluna diagnosis, os ":" é referente a todas as linhas
 # Transformo os valored de M no valor 1 e B no valor 0
 # e volto a guardar a coluna
 labelencoder_Y = LabelEncoder()
 randomized_data.iloc[:, 1] = labelencoder_Y.fit_transform(randomized_data.iloc[:, 1].values)
-
 
 if debug:
     print("")
@@ -134,7 +127,6 @@ if debug:
     print("")
     print(randomized_data.iloc[:, 1])
     print("")
-
 
 if plot_graphics:
     # Cria um par plot da coluna 1 a 6 sabendo que começa no 0
@@ -144,7 +136,6 @@ if plot_graphics:
     # Laranja é o valor 1(M)
     sns.pairplot(randomized_data.iloc[:, 1:11], hue='diagnosis')
 
-
 if debug:
     # Mostra quais colunas interferem com quais colunas
     print("")
@@ -153,18 +144,16 @@ if debug:
     print(randomized_data.iloc[:, 1:12].corr())
     print("")
 
-
 if plot_graphics:
     plt.figure(figsize=(10, 10))
     sns.heatmap(randomized_data.iloc[:, 1:12].corr(), annot=True, fmt='.0%')
     plt.show()
 
-
 # Divide os dados em array e em diferentes datasets Y e X
 # Y é a coluna diagnosis
 # X são todas as outras colunas
 # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-X = randomized_data.iloc[:, 2:31].values
+X = randomized_data.iloc[:, 2:11].values
 Y = randomized_data.iloc[:, 1].values
 
 # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
@@ -175,28 +164,30 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
 
+
 def models(X_train, Y_train):
     # Logistic Regression
     from sklearn.linear_model import LogisticRegression
     log = LogisticRegression(random_state=0)
     log.fit(X_train, Y_train)
 
-    #Decision Tree
+    # Decision Tree
     from sklearn.tree import DecisionTreeClassifier
     tree = DecisionTreeClassifier(criterion='entropy', random_state=0)
     tree.fit(X_train, Y_train)
 
-    #Random Forest Classifier
+    # Random Forest Classifier
     from sklearn.ensemble import RandomForestClassifier
     forest = RandomForestClassifier(n_estimators=10, criterion='entropy', random_state=0)
     forest.fit(X_train, Y_train)
 
-    #Model Accuracy sobre os dados de treino
+    # Model Accuracy sobre os dados de treino
     print('[0] Logistic Regression Training Accuracy:', log.score(X_train, Y_train))
     print('[1] Decision Tree Classifier Training Accuracy:', tree.score(X_train, Y_train))
     print('[2] Random Forest Classifier Training Accuracy:', forest.score(X_train, Y_train))
 
     return log, tree, forest
+
 
 # Correr todos os modelos
 
@@ -204,11 +195,12 @@ model = models(X_train, Y_train)
 
 print(model)
 
-#teste da accuracy do model no data test com a confusion matrix
-#[TP][FP]
-#[FN][TN]
+# teste da accuracy do model no data test com a confusion matrix
+# [TP][FP]
+# [FN][TN]
 
 from sklearn.metrics import confusion_matrix
+
 for i in range(len(model)):
     print('Model', i)
     cm = confusion_matrix(Y_test, model[i].predict(X_test))
@@ -217,10 +209,10 @@ for i in range(len(model)):
     TN = cm[1][1]
     FN = cm[1][0]
     FP = cm[0][1]
-    print('Testing Accuracy', (TP + TN)/(TP + TN + FN + FP))
+    print('Testing Accuracy', (TP + TN) / (TP + TN + FN + FP))
     print()
 
-#Outra maneira de receber as metricas dos modelos
+# Outra maneira de receber as metricas dos modelos
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
@@ -229,3 +221,9 @@ for i in range(len(model)):
     print(classification_report(Y_test, model[i].predict(X_test)))
     print(accuracy_score(Y_test, model[i].predict(X_test)))
     print()
+
+# Faz um print da prediction do Random Forest Classifier Model
+pred = model[2].predict(X_test)
+print(pred)
+print()
+print(Y_test)
