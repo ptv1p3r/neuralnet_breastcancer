@@ -9,6 +9,8 @@ from models import model_decision_tree_classifier, model_logistic_regression, mo
 
 X_train, X_test, Y_train, Y_test = dataset()
 
+print(X_train[0])
+
 # Escolher o model para treinar
 # Descomentar o modelo pretendido
 regModel = model_logistic_regression(X_train, Y_train)
@@ -98,3 +100,8 @@ plt.ylabel('True positive rate')
 plt.title('ROC curve')
 plt.legend(loc='best')
 plt.show()
+
+print('Take a batch of 10 examples from the training data and call model.predict on it.')
+example_batch = X_train[:10]
+example_result = modelSequential.predict(example_batch)
+print(example_result)
