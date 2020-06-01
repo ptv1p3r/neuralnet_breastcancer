@@ -239,7 +239,7 @@ pred = model[2].predict(X_test)
 print(pred)
 print('')
 print(Y_test)
-print('###############################################################################################################')
+print('\n###############################################################################################################')
 
 # TODO: Passar isto para função e organizar melhor o modelo sequencial de maneira a que possamos alterar os parametros mais facilmente
 # Define a "shallow" logistic regression model
@@ -247,8 +247,12 @@ print('#########################################################################
 # isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
 # cada hiden layer é ativada pela afunção de ativação  'relu'
 model = tf.keras.Sequential()
-model.add(tf.keras.layers.Dense(15, input_shape=(29,), activation='relu'))
+model.add(tf.keras.layers.Dense(29, input_shape=(29,), activation='relu'))
+model.add(tf.keras.layers.Dropout(0.5))
 # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
+model.add(tf.keras.layers.Dense(29, input_shape=(29,), activation='relu'))
+model.add(tf.keras.layers.Dropout(0.5))
+
 model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
@@ -257,10 +261,9 @@ model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy']
 earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1, mode='auto')
 
 # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
-history = model.fit(X_train, Y_train, epochs=2000, validation_split=0.15, verbose=0, callbacks=[earlystopper])
+history = model.fit(X_train, Y_train, epochs=1000, validation_split=0.15, verbose=0, batch_size=None, callbacks=[earlystopper])
 
 history_dict = history.history
-
 
 # Avaliação do Modelo Sequencial
 print('')
@@ -279,3 +282,5 @@ modelTest = tf.keras.models.load_model(models_path)
 loss, acc = modelTest.evaluate(X_test, Y_test, verbose=2)
 print("Test loss: ", loss)
 print("Test accuracy: ", acc)
+
+
