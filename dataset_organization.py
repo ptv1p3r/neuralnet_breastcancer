@@ -12,7 +12,6 @@ import tensorflow as tf
 # ################################## Develop Mode ######################################################################
 import pandas as pd
 import numpy as np
-import matplotlib
 from matplotlib import pyplot as plt
 
 from sklearn import preprocessing

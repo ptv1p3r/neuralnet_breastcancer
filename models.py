@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
 
+
 def model_logistic_regression(x_train, y_train):
     # Logistic Regression
     log = LogisticRegression(random_state=0)
@@ -62,7 +63,9 @@ def model_sequential(x_train, y_train):
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
-    model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
+    optimizer = tf.keras.optimizers.Adam(lr=0.001)
+
+    model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     # Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
     earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1,
