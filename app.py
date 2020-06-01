@@ -1,11 +1,13 @@
 from config import *
+import tensorflow as tf
 from dataset_organization import dataset
-from models import models
+from models import models, model_sequential
+
+from sklearn.metrics import confusion_matrix
 
 X_train, X_test, Y_train, Y_test = dataset()
 
 # Correr todos os modelos
-
 model = models(X_train, Y_train)
 
 print(model)
@@ -13,9 +15,6 @@ print(model)
 # teste da accuracy do model no data test com a confusion matrix
 # [TP][FP]
 # [FN][TN]
-
-from sklearn.metrics import confusion_matrix
-
 for i in range(len(model)):
     print('Model', i)
     cm = confusion_matrix(Y_test, model[i].predict(X_test))
@@ -45,5 +44,24 @@ print(Y_test)
 print('###############################################################################################################')
 
 
+modelSequential, history_dict = model_sequential(X_train, Y_train)
+
+# Avaliação do Modelo Sequencial
+print('')
+loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
+
+# Guardar o modelo feito
+modelSequential.save(models_path)
+
+# Apaga o modelo anterior para testar
+del modelSequential
+
+modelTest = tf.keras.models.load_model(models_path)
+
+loss, acc = modelTest.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
 
 

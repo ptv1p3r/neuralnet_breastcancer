@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -22,3 +24,28 @@ def models(x_train, y_train):
     print('[2] Random Forest Classifier Training Accuracy:', forest.score(x_train, y_train))
 
     return log, tree, forest
+
+
+def model_sequential(x_train, y_train):
+    # TODO: Passar isto para função e organizar melhor o modelo sequencial de maneira a que possamos alterar os parametros mais facilmente
+    # Define a "shallow" logistic regression model
+    # Input layer é de 29 neuronios isto corresponde as features do dataset
+    # isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
+    # cada hiden layer é ativada pela afunção de ativação  'relu'
+    model = tf.keras.Sequential()
+    model.add(tf.keras.layers.Dense(15, input_shape=(29,), activation='relu'))
+    # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
+    model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+
+    model.compile(loss='binary_crossentropy', optimizer='Adam', metrics=['accuracy'])
+
+    # Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
+    earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1,
+                                                    mode='auto')
+
+    # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
+    history = model.fit(x_train, y_train, epochs=2000, validation_split=0.15, verbose=0, callbacks=[earlystopper])
+
+    history_dict = history.history
+
+    return model, history_dict

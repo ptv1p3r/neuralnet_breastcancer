@@ -1,4 +1,10 @@
 import os.path
+# ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
+# '0' 'DEBUG' [Default] Print all messages
+# '1' 'INFO' Filter out INFO messages
+# '2' 'WARNING' Filter out INFO & WARNING messages
+# '3' 'ERROR' Filter out all messages
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 
 # ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
