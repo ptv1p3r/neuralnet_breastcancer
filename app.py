@@ -1,14 +1,18 @@
 from config import *
 import tensorflow as tf
 from dataset_organization import dataset
-from models import models, model_sequential
+from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, model_sequential
 
 from sklearn.metrics import confusion_matrix
 
 X_train, X_test, Y_train, Y_test = dataset()
 
-# Correr todos os modelos
-model = models(X_train, Y_train)
+# Escolher o model para treinar
+# Descomentar o modelo pretendido
+model = model_logistic_regression(X_train, Y_train)
+# model = model_decision_tree_classifier(X_train, Y_train)
+# model = model_random_forest_classifier(X_train, Y_train)
+
 
 print(model)
 
