@@ -4,6 +4,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+from sklearn.metrics import confusion_matrix
+
+# Outra maneira de receber as metricas dos modelos
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
 
 #
 # def models(x_train, y_train):
@@ -34,6 +39,8 @@ def model_logistic_regression(x_train, y_train):
     # Model Accuracy sobre os dados de treino
     print('Logistic Regression Training Accuracy:', log.score(x_train, y_train))
 
+    getAccuracy(log, x_train, y_train)
+    getLogRegression(log, x_train, y_train)
     return log
 
 
@@ -45,6 +52,9 @@ def model_decision_tree_classifier(x_train, y_train):
     # Model Accuracy sobre os dados de treino
     print('Decision Tree Classifier Training Accuracy:', tree.score(x_train, y_train))
 
+    getAccuracy(tree, x_train, y_train)
+    getLogRegression(tree, x_train, y_train)
+
     return tree
 
 
@@ -55,7 +65,10 @@ def model_random_forest_classifier(x_train, y_train):
     # Model Accuracy sobre os dados de treino
     print('Random Forest Classifier Training Accuracy:', forest.score(x_train, y_train))
 
-    return  forest
+    getAccuracy(forest, x_train, y_train)
+    getLogRegression(forest, x_train, y_train)
+
+    return forest
 
 
 def model_sequential(x_train, y_train):
@@ -81,3 +94,27 @@ def model_sequential(x_train, y_train):
     history_dict = history.history
 
     return model, history_dict
+
+
+def getAccuracy(model, x_train, y_train):
+    print('')
+    # teste da accuracy do model no data test com a confusion matrix
+    # [TP][FP]
+    # [FN][TN]
+    cm = confusion_matrix(y_train, model.predict(x_train))
+    print(cm)
+    TP = cm[0][0]
+    TN = cm[1][1]
+    FN = cm[1][0]
+    FP = cm[0][1]
+    print('Testing Accuracy', (TP + TN) / (TP + TN + FN + FP))
+    print('')
+
+
+def getLogRegression(model, x_train, y_train):
+    print('')
+    print('Model - Logistic Regression')
+    print(classification_report(y_train, model.predict(x_train)))
+    print(accuracy_score(y_train, model.predict(x_train)))
+    print('')
+

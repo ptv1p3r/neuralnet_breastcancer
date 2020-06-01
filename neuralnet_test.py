@@ -1,5 +1,6 @@
 import os.path
 from os import path
+
 # ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
 # '0' 'DEBUG' [Default] Print all messages
 # '1' 'INFO' Filter out INFO messages
@@ -40,7 +41,6 @@ data_name = 'wdbc.data'
 
 # Nome do diretorio do model
 models_path_name = 'models'
-
 
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
