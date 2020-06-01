@@ -50,15 +50,17 @@ print('test loss, test acc:', results)
 
 # Generate predictions (probabilities -- the output of the last layer)
 # on new data using `predict`
-#Isto é para teste
+# Isto é para teste
 print('\n# Generate predictions for 3 samples')
 predictions = modelSequential.predict(X_test[:3])
 print('predictions shape:', predictions.shape)
 
 # The AUC score is simply the area under the curve which can be calculated with Simpson’s Rule. The bigger the AUC score the better our classifier is.
-#isto é a area a tracejado que aparece no grafico
+# isto é a area a tracejado que aparece no grafico
 
 # AUC score of testing data
+# TODO : nao se fazem imports a meio do codigo
+# TODO : mais de 10 linhas de codigo, é funcao
 
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
@@ -83,10 +85,9 @@ plt.show()
 # AUC score of training data
 
 y_train_pred = modelSequential.predict(X_train)
-fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train,y_train_pred)
+fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train, y_train_pred)
 auc_keras = auc(fpr_keras, tpr_keras)
 print('Training data AUC: ', auc_keras)
-
 
 # ROC curve of training data
 plt.figure(1)
