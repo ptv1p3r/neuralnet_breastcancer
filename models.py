@@ -6,6 +6,7 @@ from sklearn.metrics import confusion_matrix
 # Outra maneira de receber as metricas dos modelos
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
+from config import *
 
 
 def model_logistic_regression(x_train, y_train):
@@ -56,8 +57,11 @@ def model_sequential(x_train, y_train):
     # cada hiden layer é ativada pela afunção de ativação  'relu'
     model = tf.keras.Sequential()
     # TODO: utilizar o len(dataset.keys()) para o input_shape
-    model.add(tf.keras.layers.Dense(29, input_shape=(29,), activation='relu'))
-    model.add(tf.keras.layers.Dense(14, input_shape=(29,), activation='relu'))
+    model.add(tf.keras.layers.Flatten(input_shape=(29,)))
+    model.add(tf.keras.layers.Dense(29, activation='relu'))
+    model.add(tf.keras.layers.Dropout(0.5))
+    model.add(tf.keras.layers.Dense(14, activation='relu'))
+    model.add(tf.keras.layers.Dropout(0.5))
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     optimizer = tf.keras.optimizers.Adam(lr=0.001)
@@ -66,7 +70,7 @@ def model_sequential(x_train, y_train):
     # earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1,
     #                                                 mode='auto')
     # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
-    history = model.fit(x_train, y_train, epochs=100, validation_split=0.15, verbose=0)
+    history = model.fit(x_train, y_train, epochs=200, validation_split=0.15, verbose=0)
     history_dict = history.history
 
     return model, history_dict
@@ -93,3 +97,11 @@ def getLogRegression(model, x_train, y_train):
     print(classification_report(y_train, model.predict(x_train)))
     print(accuracy_score(y_train, model.predict(x_train)))
     print('')
+
+
+def sequencial_predict(X_test):
+    if models_path:
+        modelSequencial = tf.keras.models.load_model(models_path)
+        prediction = modelSequencial.predict(X_test)
+
+    return prediction

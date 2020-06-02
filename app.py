@@ -33,7 +33,7 @@ print("Test loss: ", loss)
 print("Test accuracy: ", acc)
 
 # Guardar o modelo feito
-modelSequential.save(models_path)
+# modelSequential.save(models_path)
 
 # Apaga o modelo anterior para testar
 # del modelSequential
@@ -108,5 +108,3 @@ print('Take a batch of 10 examples from the training data and call model.predict
 example_batch = X_train[:10]
 example_result = modelSequential.predict(example_batch)
 print(example_result)
-
-

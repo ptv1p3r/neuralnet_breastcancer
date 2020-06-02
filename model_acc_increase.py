@@ -16,15 +16,16 @@ else:
     print('There is no Model to improve')
     quit()
 
-# TODO: corre o algoritmo de melhoria 10 ou 15 vezes,
-#  se nao houver melhorias, informa, caso contrario, guarda as melhorias e escreve os novos valores.
-while increaseModelAcc < 10:
+
+while increaseModelAcc <= 10:
     if acc <= accGoal:
         model_sequential(X_train, Y_train)
         modelSequential, history_dict = model_sequential(X_train, Y_train)
         loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
+        increaseModelAcc += 1
     else:
         break
+
 if acc > accGoal:
     modelSequential.save(models_path)
     # print("Test loss: ", loss)
