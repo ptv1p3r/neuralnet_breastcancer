@@ -106,18 +106,4 @@ example_batch = X_train[:10]
 example_result = modelSequential.predict(example_batch)
 print(example_result)
 
-if models_path:
-    modelGoal = tf.keras.models.load_model(models_path)
-    lossGoal, accGoal = modelGoal.evaluate(X_test, Y_test, verbose=2)
-if accGoal > acc:
-    del modelSequential
 
-while acc < accGoal:
-    modelSequential(X_train, Y_train)
-    modelSequential, history_dict = model_sequential(X_train, Y_train)
-    loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
-
-if acc > accGoal:
-    modelSequential.save(models_path)
-    print("Test loss: ", loss)
-    print("Test accuracy: ", acc)

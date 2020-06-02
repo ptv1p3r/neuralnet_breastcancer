@@ -56,15 +56,17 @@ def model_sequential(x_train, y_train):
     # cada hiden layer é ativada pela afunção de ativação  'relu'
     model = tf.keras.Sequential()
     # TODO: utilizar o len(dataset.keys()) para o input_shape
-    model.add(tf.keras.layers.Dense(15, input_shape=(29,), activation='relu'))
+    model.add(tf.keras.layers.Dense(29, input_shape=(29,), activation='relu'))
+    model.add(tf.keras.layers.Dense(14, input_shape=(29,), activation='relu'))
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     optimizer = tf.keras.optimizers.Adam(lr=0.001)
     model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     # Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
-    earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1, mode='auto')
+    # earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1,
+    #                                                 mode='auto')
     # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
-    history = model.fit(x_train, y_train, epochs=2000, validation_split=0.15, verbose=0, callbacks=[earlystopper])
+    history = model.fit(x_train, y_train, epochs=100, validation_split=0.15, verbose=0)
     history_dict = history.history
 
     return model, history_dict
