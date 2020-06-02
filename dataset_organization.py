@@ -2,6 +2,7 @@ from config import *
 
 import os.path
 from os import path
+
 # ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
 # '0' 'DEBUG' [Default] Print all messages
 # '1' 'INFO' Filter out INFO messages
@@ -21,6 +22,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Ver estatisticas
 import seaborn as sns
+
 
 def dataset():
     # verifica se a pasta dataset existe, se não, então é criada
@@ -132,7 +134,7 @@ def dataset():
     # Y é a coluna diagnosis
     # X são todas as outras colunas
     # Basicamente a coluna Y diz se o passiente tem Cancro ou não e a coluna X os dados relacionados
-    X = randomized_data.iloc[:, 2:31].values
+    X = randomized_data.iloc[:, 2:32].values
     Y = randomized_data.iloc[:, 1].values
 
     # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn

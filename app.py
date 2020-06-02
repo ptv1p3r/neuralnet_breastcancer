@@ -7,9 +7,9 @@ from dataset_organization import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential
 
-X_train, X_test, Y_train, Y_test = dataset()
+import joblib
 
-print(X_train[0])
+X_train, X_test, Y_train, Y_test = dataset()
 
 # Escolher o model para treinar
 # Descomentar o modelo pretendido
@@ -19,7 +19,10 @@ decModel = model_decision_tree_classifier(X_train, Y_train)
 print('###############################################################################################################')
 classMmodel = model_random_forest_classifier(X_train, Y_train)
 print('###############################################################################################################')
+#TODO: Save a class model test (ver se é utilizavel ou eliminar depois)
 
+# database_path = os.path.join(models_path, 'classModel.sav')
+# joblib.dump(classMmodel, database_path)
 print('---------------------------------------------------------------------------------------------------------------')
 modelSequential, history_dict = model_sequential(X_train, Y_train)
 
@@ -74,15 +77,15 @@ print('Testing data AUC: ', auc_keras)
 
 # ROC curve of testing data
 
-plt.figure(1)
-plt.plot([0, 1], [0, 1], 'k--')
-plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
-# plt.plot(fpr_rf, tpr_rf, label='RF (area = {:.3f})'.format(auc_rf))
-plt.xlabel('False positive rate')
-plt.ylabel('True positive rate')
-plt.title('ROC curve')
-plt.legend(loc='best')
-plt.show()
+# plt.figure(1)
+# plt.plot([0, 1], [0, 1], 'k--')
+# plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
+# # plt.plot(fpr_rf, tpr_rf, label='RF (area = {:.3f})'.format(auc_rf))
+# plt.xlabel('False positive rate')
+# plt.ylabel('True positive rate')
+# plt.title('ROC curve')
+# plt.legend(loc='best')
+# plt.show()
 
 # AUC score of training data
 
@@ -92,14 +95,14 @@ auc_keras = auc(fpr_keras, tpr_keras)
 print('Training data AUC: ', auc_keras)
 
 # ROC curve of training data
-plt.figure(1)
-plt.plot([0, 1], [0, 1], 'k--')
-plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
-plt.xlabel('False positive rate')
-plt.ylabel('True positive rate')
-plt.title('ROC curve')
-plt.legend(loc='best')
-plt.show()
+# plt.figure(1)
+# plt.plot([0, 1], [0, 1], 'k--')
+# plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
+# plt.xlabel('False positive rate')
+# plt.ylabel('True positive rate')
+# plt.title('ROC curve')
+# plt.legend(loc='best')
+# plt.show()
 
 print('Take a batch of 10 examples from the training data and call model.predict on it.')
 example_batch = X_train[:10]
