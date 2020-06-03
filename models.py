@@ -103,5 +103,7 @@ def sequencial_predict(X_test):
     if models_path:
         modelSequencial = tf.keras.models.load_model(models_path)
         prediction = modelSequencial.predict(X_test)
+    else:
+        print('No model created to use for a prediction')
 
     return prediction

@@ -30,5 +30,6 @@ if acc > accGoal:
     modelSequential.save(models_path)
     # print("Test loss: ", loss)
     print("Test accuracy: ", acc)
+    print("Model was improved by: ", (acc-accGoal))
 else:
     print('Não foi possível melhorar o modelo!')
