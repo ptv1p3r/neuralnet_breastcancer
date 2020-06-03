@@ -1,8 +1,6 @@
 from config import *
 import tensorflow as tf
-
 from matplotlib import pyplot as plt
-
 from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential
@@ -11,13 +9,15 @@ import joblib
 
 X_train, X_test, Y_train, Y_test = dataset()
 
+print(X_train[0])
+
 # Escolher o model para treinar
 # Descomentar o modelo pretendido
 regModel = model_logistic_regression(X_train, Y_train)
 print('###############################################################################################################')
 decModel = model_decision_tree_classifier(X_train, Y_train)
 print('###############################################################################################################')
-classMmodel = model_random_forest_classifier(X_train, Y_train)
+classModel = model_random_forest_classifier(X_train, Y_train)
 print('###############################################################################################################')
 #TODO: Save a class model test (ver se é utilizavel ou eliminar depois)
 
@@ -25,14 +25,13 @@ print('#########################################################################
 # joblib.dump(classMmodel, database_path)
 print('---------------------------------------------------------------------------------------------------------------')
 modelSequential, history_dict = model_sequential(X_train, Y_train)
-
 # Avaliação do Modelo Sequencial
 print('')
 loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
 print("Test loss: ", loss)
 print("Test accuracy: ", acc)
 
-# Guardar o modelo feito
+# # Guardar o modelo feito
 # modelSequential.save(models_path)
 
 # Apaga o modelo anterior para testar
