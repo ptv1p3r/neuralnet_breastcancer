@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from matplotlib import pyplot as plt
 
-from dataset_organization import dataset
+from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential
 

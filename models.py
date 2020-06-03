@@ -57,10 +57,10 @@ def model_sequential(x_train, y_train):
     # cada hiden layer é ativada pela afunção de ativação  'relu'
     model = tf.keras.Sequential()
     # TODO: utilizar o len(dataset.keys()) para o input_shape
-    model.add(tf.keras.layers.Flatten(input_shape=(29,)))
-    model.add(tf.keras.layers.Dense(29, activation='relu'))
+    model.add(tf.keras.layers.Flatten(input_shape=(30,)))
+    model.add(tf.keras.layers.Dense(30, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(14, activation='relu'))
+    model.add(tf.keras.layers.Dense(15, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.5))
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))

@@ -1,5 +1,5 @@
 from config import *
-from dataset_organization import dataset
+from dataset import dataset
 
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
