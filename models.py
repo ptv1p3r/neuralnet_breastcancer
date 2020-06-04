@@ -71,6 +71,7 @@ def model_sequential(x_train, y_train):
     #                                                 mode='auto')
     # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
     history = model.fit(x_train, y_train, epochs=200, validation_split=0.15, verbose=0)
+
     history_dict = history.history
 
     return model, history_dict

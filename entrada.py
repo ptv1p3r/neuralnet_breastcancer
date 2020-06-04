@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 import argparse
 import pandas as pd
-
+from models import model_sequential
 import joblib
 
 from sklearn.preprocessing import StandardScaler
@@ -49,6 +49,36 @@ print('--')
 print(X[: 1])
 print('')
 print(X_train[:1])
+
+
+
+
+modelSequential, history_dict = model_sequential(X_train, Y_train)
+
+# Avaliação do Modelo Sequencial
+print('')
+loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
+print("Test loss: ", loss)
+print("Test accuracy: ", acc)
+
+# AUC score of training data
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+
+y_train_pred = modelSequential.predict_proba(X_train)
+fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train,y_train_pred)
+auc_keras = auc(fpr_keras, tpr_keras)
+print('Training data AUC: ', auc_keras)
+
+
+
+# TODO: Dividir o valor por 1000
+print('')
+print('teste')
+pred = modelSequential.predict(X_test[:10])
+print(pred)
+print()
+print(Y_test)
 
 
 # model = tf.keras.models.load_model(models_path)
