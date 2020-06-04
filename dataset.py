@@ -48,7 +48,7 @@ def dataset():
     my_data.columns = ['id', 'diagnosis', 'radius', 'texture', 'perimeter', 'area', 'smoothness',
                        'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension', 'radius_se',
                        'texture_se', 'perimeter_se', 'area_se', 'smoothness_se', 'compactness_se', 'concavity_se',
-                       'concave_points_se', 'symmetry_se', 'fractal_dimension_se', 'radius_worse', 'texture_worst',
+                       'concave_points_se', 'symmetry_se', 'fracta+-*+9**8/-l_dimension_se', 'radius_worse', 'texture_worst',
                        'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
                        'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
 
