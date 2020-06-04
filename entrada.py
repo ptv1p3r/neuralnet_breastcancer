@@ -92,7 +92,7 @@ print(Y_test)
 
 # TODO: Descomentar mais tarde
 
-# # load the model from disk
+# # load the model from diskk
 # database_path = os.path.join(models_path, 'classModel.sav')
 #
 # loaded_model = joblib.load(database_path)
