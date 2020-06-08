@@ -31,8 +31,11 @@ loss, acc = modelSequential.evaluate(X_test, Y_test, verbose=2)
 print("Test loss: ", loss)
 print("Test accuracy: ", acc)
 
+
+
 # # Guardar o modelo feito
-# modelSequential.save(models_path)
+modelSequential.save(models_path) if not modelExists else None
+
 
 # Apaga o modelo anterior para testar
 # del modelSequential

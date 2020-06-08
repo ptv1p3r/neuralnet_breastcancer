@@ -101,7 +101,7 @@ def dataset():
     # e volto a guardar a coluna
     labelencoder_Y = LabelEncoder()
     randomized_data.iloc[:, 1] = labelencoder_Y.fit_transform(randomized_data.iloc[:, 1].values)
-
+    print(randomized_data)
     if debug:
         print("")
         print("========== Valores de diagnosis passados para binario ==========")

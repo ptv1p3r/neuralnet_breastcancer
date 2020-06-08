@@ -50,9 +50,6 @@ print(X[: 1])
 print('')
 print(X_train[:1])
 
-
-
-
 modelSequential, history_dict = model_sequential(X_train, Y_train)
 
 # Avaliação do Modelo Sequencial
@@ -66,11 +63,9 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 
 y_train_pred = modelSequential.predict_proba(X_train)
-fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train,y_train_pred)
+fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train, y_train_pred)
 auc_keras = auc(fpr_keras, tpr_keras)
 print('Training data AUC: ', auc_keras)
-
-
 
 # TODO: Dividir o valor por 1000
 print('')
@@ -79,7 +74,6 @@ pred = modelSequential.predict(X_test[:10])
 print(pred)
 print()
 print(Y_test)
-
 
 # model = tf.keras.models.load_model(models_path)
 

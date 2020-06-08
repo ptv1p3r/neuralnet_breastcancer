@@ -30,7 +30,7 @@ models_path_name = 'models'
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
 do_shuffle = False
-test_size = 0.25
+test_size = 0.1
 # ######################################################################################################################
 
 # Define corretamente os caminhos do dataset
@@ -40,3 +40,7 @@ database_path = os.path.join(dataset_path, data_name)
 
 # Define corretamente os caminhos dos modelos
 models_path = os.path.join(app_root, models_path_name)
+modelExists = os.path.exists(models_path)
+
+
+
