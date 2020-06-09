@@ -4,10 +4,12 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
-from config import *
 from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
+from utils import structureCheck
+
+APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
 
 
 def training():
@@ -40,7 +42,7 @@ def training():
     print("Test accuracy: ", acc)
 
     # # Guardar o modelo feito
-    modelSequential.save(models_path) if not modelExists else None
+    modelSequential.save(MODELS_PATH) if not MODEL_EXISTS else None
 
     # Apaga o modelo anterior para testar
     # del modelSequential
@@ -118,8 +120,8 @@ def acc_increase():
     increaseModelAcc = 1
     X_train, X_test, Y_train, Y_test = dataset()
 
-    if modelExists:
-        modelGoal = tf.keras.models.load_model(models_path)
+    if MODEL_EXISTS:
+        modelGoal = tf.keras.models.load_model(MODELS_PATH)
         lossGoal, accGoal = modelGoal.evaluate(X_test, Y_test, verbose=2)
         loss = lossGoal
         acc = accGoal
@@ -139,7 +141,7 @@ def acc_increase():
             break
 
     if acc > accGoal:
-        modelSequential.save(models_path)
+        modelSequential.save(MODELS_PATH)
         print("Test accuracy: ", acc)
         print("Model was improved by: ", (acc - accGoal))
     else:
@@ -189,7 +191,7 @@ def predict(data):
     # print(X_train[:1])
 
 
-    modelSequential = tf.keras.models.load_model(models_path)
+    modelSequential = tf.keras.models.load_model(MODELS_PATH)
 
     # Avaliação do Modelo Sequencial
     print('')

@@ -6,29 +6,22 @@
 LOGLEVEL = '3'
 # ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
-debug = False
-plot_graphics = False
+DEBUG = False
+PLOT_GRAPHICS = False
 # ################################## Directorias #######################################################################
-# URL da BD
-data_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
-
-# Nome do diretorio do dataset
-dataset_path_name = 'dataset'
-
-# Nome do ficheiro da DB
-file_name = "wdbc.data"
+DATA_URI = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
 
 # Nome que vai ser dado a BD
-data_name = 'wdbc.data'
+DATA_NAME = 'wdbc.data'
 
 # Nome do diretorio do model
-models_path_name = 'models'
-
+MODELS_FOLDER = 'models'
+DATASET_FOLDER = 'dataset'
 
 # ########################### Opções aplicadas ao nosso modelo e tratamento de dados ###################################
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
-do_shuffle = False
-test_size = 0.1
+DO_SHUFFLE = False
+TEST_SIZE = 0.1
 # ######################################################################################################################
 
 

@@ -1,24 +1,14 @@
 import os.path
 import getopt
 import sys
-import config
-from neuralnet import training, acc_increase, predict
+from config import *
+from neuralnet import acc_increase, predict, training
 
 
 def main(argv):
     try:
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = config.LOGLEVEL  # or any {'0', '1', '2'}
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = LOGLEVEL  # or any {'0', '1', '2'}
 
-        # Define corretamente os caminhos do dataset
-        app_root = os.path.dirname(os.path.abspath(__file__))
-        dataset_path = os.path.join(app_root, config.dataset_path_name)
-        database_path = os.path.join(dataset_path, config.data_name)
-
-        # Define corretamente os caminhos dos modelos
-        models_path = os.path.join(app_root, config.models_path_name)
-        modelExists = os.path.exists(models_path)
-
-        # opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
         opts, args = getopt.getopt(argv, "htip:", ["pstring="])
     except getopt.GetoptError as msg:
         print('error :' + str(msg))

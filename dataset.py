@@ -1,44 +1,38 @@
+import config
 from config import *
-
 import os.path
 from os import path
-
-# ###################### Controlo das msg no terminal relacionadas com o Tensorflow ####################################
-# '0' 'DEBUG' [Default] Print all messages
-# '1' 'INFO' Filter out INFO messages
-# '2' 'WARNING' Filter out INFO & WARNING messages
-# '3' 'ERROR' Filter out all messages
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 import tensorflow as tf
-# ################################## Develop Mode ######################################################################
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-
 from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
 # Ver estatisticas
 import seaborn as sns
 
+from utils import structureCheck
+
 
 def dataset():
+    APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
+
     # verifica se a pasta dataset existe, se não, então é criada
-    if not path.exists(dataset_path):
-        os.makedirs(dataset_path)
+    if not path.exists(DATASET_PATH):
+        os.makedirs(DATASET_PATH)
 
     # se a outra existir ele substitui para prevenir que alguma key existente esteja corrompida
-    if not path.exists(database_path) or not path.exists(database_path):
+    if not path.exists(DATASET_FILE):
         # Faz o download do data set do URL da BD original e guarda no diretorio com o nome da variavel dataset_path_name
         # isto deixa a app mais dinamica para que no futuro possamos trabalhar outros dados
-        file_name = tf.keras.utils.get_file(fname=database_path, origin=data_url)
+        file_name = tf.keras.utils.get_file(fname=DATASET_FILE, origin=DATA_URI)
 
     # Load dos dados da nossa DB
-    my_data = pd.read_csv(database_path, delimiter=',')
+    my_data = pd.read_csv(DATASET_FILE, delimiter=',')
 
-    if debug:
+    if DEBUG:
         print("")
         print("========== Dados row do dataset ==========")
         print("")
@@ -52,7 +46,7 @@ def dataset():
                        'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
                        'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
 
-    if debug:
+    if DEBUG:
         # Confirmar as colunas se estão corretas
         print("")
         print("========== Dados row com nomes nas colunas ==========")
@@ -64,32 +58,32 @@ def dataset():
     # Por exemplo se estiverem ordenados por tamanho e começar no Benigno para o Maligno
     # Podemos estár a dividir para o treino os Benignos e para o teste apenas os Malignos
     # Por isso pode ser do interesse baralhar os dados ou não
-    if do_shuffle:
+    if DO_SHUFFLE:
         randomized_data = my_data.reindex(np.random.permutation(my_data.index))
     else:
         randomized_data = my_data
 
-    if debug:
+    if DEBUG:
         print("")
         print("========== Shuffle dos dados ==========")
         print("")
         print(randomized_data)
         print("")
 
-    if debug:
+    if DEBUG:
         print("")
         print("========== Verificar se existem campos sem informação por coluna ==========")
         print("")
         print(randomized_data.isna().sum())
         print("")
 
-    if plot_graphics:
+    if PLOT_GRAPHICS:
         # Grafico do n° de cancros Benignos ou Malignos
         # Isto é apresentado quando corrermos o comando plt.show()
         sns.countplot(randomized_data['diagnosis'], label='count')
 
     # perceber o tipo de campos que temos no dataset
-    if debug:
+    if DEBUG:
         print("")
         print("========== Tipo de Coluna do dataset ==========")
         print("")
@@ -102,14 +96,14 @@ def dataset():
     labelencoder_Y = LabelEncoder()
     randomized_data.iloc[:, 1] = labelencoder_Y.fit_transform(randomized_data.iloc[:, 1].values)
 
-    if debug:
+    if DEBUG:
         print("")
         print("========== Valores de diagnosis passados para binario ==========")
         print("")
         print(randomized_data.iloc[:, 1])
         print("")
 
-    if plot_graphics:
+    if PLOT_GRAPHICS:
         # Cria um par plot da coluna 1 a 6 sabendo que começa no 0
         # Aplicando o K-means apenas para visualizar e não para ordenar
         # Apenas para termos uma visualização dos clusters
@@ -117,7 +111,7 @@ def dataset():
         # Laranja é o valor 1(M)
         sns.pairplot(randomized_data.iloc[:, 1:11], hue='diagnosis')
 
-    if debug:
+    if DEBUG:
         # Mostra quais colunas interferem com quais colunas
         print("")
         print("========== Correlação entre colunas ==========")
@@ -125,7 +119,7 @@ def dataset():
         print(randomized_data.iloc[:, 1:12].corr())
         print("")
 
-    if plot_graphics:
+    if PLOT_GRAPHICS:
         plt.figure(figsize=(10, 10))
         sns.heatmap(randomized_data.iloc[:, 1:12].corr(), annot=True, fmt='.0%')
         plt.show()
@@ -138,7 +132,7 @@ def dataset():
     Y = randomized_data.iloc[:, 1].values
 
     # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size, random_state=0)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=TEST_SIZE, random_state=0)
 
     # Escala os dados para criar uma maior correlação entre eles
     sc = StandardScaler()
