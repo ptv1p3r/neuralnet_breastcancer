@@ -6,6 +6,7 @@ from config import *
 import tensorflow as tf
 from matplotlib import pyplot as plt
 from dataset import dataset
+from entrada import predict
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
 import joblib
@@ -16,19 +17,22 @@ import sys
 def main(argv):
     try:
         # opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
-        opts, args = getopt.getopt(argv, "hti")
+        opts, args = getopt.getopt(argv, "htip:", ["pstring="])
     except getopt.GetoptError as msg:
         print('error :' + str(msg))
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('app.py -t : Train network')
+            print('app.py -t : Train network -i : Increase Model')
             sys.exit()
         elif opt == '-t':
             training()
             sys.exit()
         elif opt == '-i':
             acc_increase()
+            sys.exit()
+        elif opt in ("-p", "--pstring"):
+            predict(arg)
             sys.exit()
 
 
