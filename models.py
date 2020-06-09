@@ -119,45 +119,6 @@ def model_sequential_increase(x_train, y_train, i, j, k):
         history_dict = history.history
         return model, history_dict
 
-def model_sequential_increase(x_train, y_train, i, j, k):
-    if i == 1:
-        model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        model.add(tf.keras.layers.Dense(j, activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        history_dict = history.history
-        return model, history_dict
-
-    if i == 2:
-        model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        model.add(tf.keras.layers.Dense(j, activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense((j / 2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        history_dict = history.history
-        return model, history_dict
-
-    if i == 3:
-        model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        model.add(tf.keras.layers.Dense(j, activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense((j/2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense(((j/2)/2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        history_dict = history.history
-        return model, history_dict
 
 def getAccuracy(model, x_train, y_train):
     print('')
