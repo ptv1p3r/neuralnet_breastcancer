@@ -8,6 +8,7 @@ import argparse
 import pandas as pd
 from models import model_sequential
 import joblib
+import numpy as np
 
 from sklearn.preprocessing import StandardScaler
 
@@ -27,30 +28,38 @@ print('#' * 80)
 result = [x.strip() for x in raw_text.split(',')]
 X_train, X_test, Y_train, Y_test = dataset()
 
-print(result)
-print('a' * 80)
-df = pd.DataFrame([result])
+# print(result)
+print('*' * 80)
+df = pd.DataFrame(result)
 
 # df = df.apply(pd.to_numeric)
 df = df.astype(float)
 
-df.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
-              'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension', 'radius_se',
-              'texture_se', 'perimeter_se', 'area_se', 'smoothness_se', 'compactness_se', 'concavity_se',
-              'concave_points_se', 'symmetry_se', 'fractal_dimension_se', 'radius_worse', 'texture_worst',
-              'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
-              'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
-
 print(df)
 # print(df.dtypes)
+
 X = df.values
 
-print('--')
-print(X[: 1])
-print('')
-print(X_train[:1])
+sc = StandardScaler()
+X = sc.fit_transform(X)
 
-modelSequential, history_dict = model_sequential(X_train, Y_train)
+dff = pd.DataFrame(X)
+# X.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
+#               'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension', 'radius_se',
+#               'texture_se', 'perimeter_se', 'area_se', 'smoothness_se', 'compactness_se', 'concavity_se',
+#               'concave_points_se', 'symmetry_se', 'fractal_dimension_se', 'radius_worse', 'texture_worst',
+#               'perimeter_worst', 'area_worst', 'smoothness_worst', 'compactness_worst', 'concavity_worst',
+#               'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
+
+print('--' * 80)
+# X = np.array(X)
+# print(X)
+print(dff)
+print('')
+# print(X_train[:1])
+
+
+modelSequential = tf.keras.models.load_model(models_path)
 
 # Avaliação do Modelo Sequencial
 print('')
@@ -62,7 +71,7 @@ print("Test accuracy: ", acc)
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 
-y_train_pred = modelSequential.predict_proba(X_train)
+y_train_pred = modelSequential.predict(X_train)
 fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train, y_train_pred)
 auc_keras = auc(fpr_keras, tpr_keras)
 print('Training data AUC: ', auc_keras)
@@ -70,37 +79,13 @@ print('Training data AUC: ', auc_keras)
 # TODO: Dividir o valor por 1000
 print('')
 print('teste')
+print('M = 1 e B = 0')
 pred = modelSequential.predict(X_test[:10])
+# pred = modelSequential.predict_on_batch(X)
 print(pred)
 print()
 print(Y_test)
 
-# model = tf.keras.models.load_model(models_path)
+print(pred.mean())
 
-# print('')
-# print('Take a batch of 10 examples from the training data and call model.predict on it.')
-# print('M = 1 e B = 0')
-# example_batch = X[: 1]
-# example_result = model.predict(example_batch)
-# print(example_result)
-
-# TODO: Descomentar mais tarde
-
-# # load the model from diskk
-# database_path = os.path.join(models_path, 'classModel.sav')
-#
-# loaded_model = joblib.load(database_path)
-# result = loaded_model.score(X_test, Y_test)
-# print(result)
-#
-# pred = loaded_model.predict(X_test)
-# print(pred)
-# print('')
-# print(Y_test)
-#
-#
-# print('')
-# print('M = 1 e B = 0')
-# pred = loaded_model.predict(X)
-# print(pred)
-# print('')
+print("Benigno" if pred.mean() <= 0.50 else "Maligno")
