@@ -15,7 +15,7 @@ def main(argv):
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('app.py -t : Train network -i : Increase Model')
+            print('usage app.py [option] [argument] ' + '\n' + '-t Train network' + '\n' + '-i Increase Model' + '\n' + '-p <data string> Neural Net Predict')
             sys.exit()
         elif opt == '-t':
             training()
