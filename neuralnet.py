@@ -4,6 +4,8 @@ import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
+
+import config
 from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
@@ -125,7 +127,7 @@ def acc_increase():
     else:
         print('There is no model to improve! Create one by using app.py first.')
 
-    while INCREASE_ACC_ATTEMPTS <= INCREASE_ACC_MAX_ATTEMPTS:
+    while config.INCREASE_ACC_ATTEMPTS <= INCREASE_ACC_MAX_ATTEMPTS:
         if acc <= accGoal:
             for layers in np.arange(MIN_LAYERS, MAX_LAYERS, RATE_LAYERS):
                 for neurons in np.arange(MIN_NEURONS, MAX_NEURONS, RATE_NEURONS):
