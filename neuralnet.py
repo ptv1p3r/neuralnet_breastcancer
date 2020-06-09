@@ -10,7 +10,7 @@ from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
 from utils import structureCheck
-from config import *
+
 
 APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
 X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = dataset()
@@ -39,7 +39,7 @@ def training():
     modelSequential, history_dict = model_sequential(X_TRAIN, Y_TRAIN)
     # Avaliação do Modelo Sequencial
     print('')
-    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=2)
+    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_EVALUATE_VERBOSE_VALUE)
     print("Test loss: ", loss)
     print("Test accuracy: ", acc)
 
@@ -60,7 +60,7 @@ def training():
     # Teste da avaliação e do predict do modelo sequencial
     # Evaluate the model on the test data using `evaluate`
     print('\n# Evaluate on test data')
-    results = modelSequential.evaluate(X_TEST, Y_TEST, batch_size=29)
+    results = modelSequential.evaluate(X_TEST, Y_TEST, batch_size=config.TRAINING_EVALUATE_BATCH_SIZE_VALUE)
     print('test loss, test acc:', results)
 
     # Generate predictions (probabilities -- the output of the last layer)
@@ -121,21 +121,21 @@ def acc_increase():
 
     if MODEL_EXISTS:
         modelGoal = tf.keras.models.load_model(MODELS_PATH)
-        lossGoal, accGoal = modelGoal.evaluate(X_TEST, Y_TEST, verbose=2)
+        lossGoal, accGoal = modelGoal.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_EVALUATE_VERBOSE_VALUE)
         loss = lossGoal
         acc = accGoal
     else:
         print('There is no model to improve! Create one by using app.py first.')
 
-    while config.INCREASE_ACC_ATTEMPTS <= INCREASE_ACC_MAX_ATTEMPTS:
+    while config.INCREASE_ACC_ATTEMPTS <= config.INCREASE_ACC_MAX_ATTEMPTS:
         if acc <= accGoal:
-            for layers in np.arange(MIN_LAYERS, MAX_LAYERS, RATE_LAYERS):
-                for neurons in np.arange(MIN_NEURONS, MAX_NEURONS, RATE_NEURONS):
-                    for dropout in np.arange(MIN_DROPOUT, MAX_DROPOUT, RATE_DROPOUT):
+            for layers in np.arange(config.MIN_LAYERS, config.MAX_LAYERS, config.RATE_LAYERS):
+                for neurons in np.arange(config.MIN_NEURONS, config.MAX_NEURONS, config.RATE_NEURONS):
+                    for dropout in np.arange(config.MIN_DROPOUT, config.MAX_DROPOUT, config.RATE_DROPOUT):
                         modelSequential, history_dict = model_sequential_increase(X_TRAIN, Y_TRAIN, layers, neurons, dropout)
-                        loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=2)
-                        print('Current Try: ', INCREASE_ACC_ATTEMPTS)
-                        INCREASE_ACC_ATTEMPTS += 1
+                        loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_EVALUATE_VERBOSE_VALUE)
+                        print('Current Try: ', config.INCREASE_ACC_ATTEMPTS)
+                        config.INCREASE_ACC_ATTEMPTS += 1
         else:
             break
 
@@ -192,7 +192,7 @@ def predict(data):
 
     # Avaliação do Modelo Sequencial
     print('')
-    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=2)
+    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_VERBOSE_EVALUATE_VALUE)
     print("Test loss: ", loss)
     print("Test accuracy: ", acc)
 
