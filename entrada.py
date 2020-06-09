@@ -43,19 +43,14 @@ df.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
 
 print(df)
 # print(df.dtypes)
+X = df.values
 
-
-sc = StandardScaler()
-X = sc.fit_transform(X)
-
-
-print(X.mean())
 print('--')
 print(X[: 1])
 print('')
 print(X_train[:1])
 
-modelSequential = tf.keras.models.load_model(models_path)
+modelSequential, history_dict = model_sequential(X_train, Y_train)
 
 # Avaliação do Modelo Sequencial
 print('')
@@ -67,7 +62,7 @@ print("Test accuracy: ", acc)
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 
-y_train_pred = modelSequential.predict(X_train)
+y_train_pred = modelSequential.predict_proba(X_train)
 fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_train, y_train_pred)
 auc_keras = auc(fpr_keras, tpr_keras)
 print('Training data AUC: ', auc_keras)
@@ -75,12 +70,37 @@ print('Training data AUC: ', auc_keras)
 # TODO: Dividir o valor por 1000
 print('')
 print('teste')
-print('M = 1 e B = 0')
-# pred = modelSequential.predict(X_test[:10])
-pred = modelSequential.predict_on_batch(X[: 1])
+pred = modelSequential.predict(X_test[:10])
 print(pred)
 print()
 print(Y_test)
 
-print(pred.mean())
-print("Benigno" if pred.mean() <= 0.50 else "Maligno")
+# model = tf.keras.models.load_model(models_path)
+
+# print('')
+# print('Take a batch of 10 examples from the training data and call model.predict on it.')
+# print('M = 1 e B = 0')
+# example_batch = X[: 1]
+# example_result = model.predict(example_batch)
+# print(example_result)
+
+# TODO: Descomentar mais tarde
+
+# # load the model from diskk
+# database_path = os.path.join(models_path, 'classModel.sav')
+#
+# loaded_model = joblib.load(database_path)
+# result = loaded_model.score(X_test, Y_test)
+# print(result)
+#
+# pred = loaded_model.predict(X_test)
+# print(pred)
+# print('')
+# print(Y_test)
+#
+#
+# print('')
+# print('M = 1 e B = 0')
+# pred = loaded_model.predict(X)
+# print(pred)
+# print('')
