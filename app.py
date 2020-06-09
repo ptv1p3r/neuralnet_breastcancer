@@ -6,7 +6,7 @@ from config import *
 import tensorflow as tf
 from matplotlib import pyplot as plt
 from dataset import dataset
-from entrada import predict
+from neuralnet import predict
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
 import joblib

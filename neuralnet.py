@@ -1,9 +1,7 @@
 from config import *
 from dataset import dataset
-
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-
 import argparse
 import pandas as pd
 from models import model_sequential
@@ -12,20 +10,13 @@ import numpy as np
 
 from sklearn.preprocessing import StandardScaler
 
-# parser = argparse.ArgumentParser(description='Test.')
-# parser.add_argument('text', action='store', type=str, help='The text to parse.')
-#
-# args = parser.parse_args()
-
 
 def predict(data):
     print('#' * 80)
     # Filtro para filtrar alguns caracteres que possa meter por engano
-    # raw_text = eval('"' + args.text.replace('"', '\\"') + '"')
     raw_text = eval('"' + data.replace('"', '\\"') + '"')
-    # print(raw_text)
+    print(raw_text)
     print('-' * 80)
-    # print(args.text)
     print(data)
     print('#' * 80)
 
