@@ -24,8 +24,8 @@ import seaborn as sns
 
 # ################################## Develop Mode ######################################################################
 # Mostra no terminal o resultado de cada passo efetuado
-debug = False
-plot_graphics = False
+debug = True
+plot_graphics = True
 # ################################## Directorias #######################################################################
 # URL da BD
 data_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
