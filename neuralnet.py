@@ -8,6 +8,7 @@ from dataset import dataset
 from models import model_decision_tree_classifier, model_logistic_regression, model_random_forest_classifier, \
     model_sequential, model_sequential_increase
 from utils import structureCheck
+from config import *
 
 APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
 X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = dataset()
@@ -125,11 +126,11 @@ def acc_increase():
     else:
         print('There is no model to improve! Create one by using app.py first.')
 
-    while increaseModelAcc <= 200:
+    while increaseModelAcc <= INCREASE_ACC_ATTEMPTS:
         if acc <= accGoal:
-            for layers in np.arange(1, 3, 1):
-                for neurons in np.arange(15, 60, 5):
-                    for dropout in np.arange(0.1, 0.5, 0.1):
+            for layers in np.arange(MIN_LAYERS, MAX_LAYERS, RATE_LAYERS):
+                for neurons in np.arange(MIN_NEURONS, MAX_NEURONS, RATE_NEURONS):
+                    for dropout in np.arange(MIN_DROPOUT, MAX_DROPOUT, RATE_DROPOUT):
                         modelSequential, history_dict = model_sequential_increase(X_TRAIN, Y_TRAIN, layers, neurons, dropout)
                         loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=2)
                         print('Current Try: ', increaseModelAcc)
