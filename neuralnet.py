@@ -116,7 +116,6 @@ def training():
 
 
 def acc_increase():
-    increaseModelAcc = 1
 
     if MODEL_EXISTS:
         modelGoal = tf.keras.models.load_model(MODELS_PATH)
@@ -126,15 +125,15 @@ def acc_increase():
     else:
         print('There is no model to improve! Create one by using app.py first.')
 
-    while increaseModelAcc <= INCREASE_ACC_ATTEMPTS:
+    while INCREASE_ACC_ATTEMPTS <= INCREASE_ACC_MAX_ATTEMPTS:
         if acc <= accGoal:
             for layers in np.arange(MIN_LAYERS, MAX_LAYERS, RATE_LAYERS):
                 for neurons in np.arange(MIN_NEURONS, MAX_NEURONS, RATE_NEURONS):
                     for dropout in np.arange(MIN_DROPOUT, MAX_DROPOUT, RATE_DROPOUT):
                         modelSequential, history_dict = model_sequential_increase(X_TRAIN, Y_TRAIN, layers, neurons, dropout)
                         loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=2)
-                        print('Current Try: ', increaseModelAcc)
-                        increaseModelAcc += 1
+                        print('Current Try: ', INCREASE_ACC_ATTEMPTS)
+                        INCREASE_ACC_ATTEMPTS += 1
         else:
             break
 
