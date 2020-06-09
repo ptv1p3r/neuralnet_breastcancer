@@ -7,8 +7,10 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 from config import *
+from utils  import structureCheck
 import numpy as np
 
+APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
 
 def model_logistic_regression(x_train, y_train):
     # Logistic Regression
@@ -79,50 +81,24 @@ def model_sequential(x_train, y_train):
     return model, history_dict
 
 
-def model_sequential_increase(x_train, y_train, i, j, k):
+def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
 
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-    model.add(tf.keras.layers.Dense(j, activation='relu'))
-    model.add(tf.keras.layers.Dropout(k))
+    model.add(tf.keras.layers.Dense(neurons, activation='relu'))
+    model.add(tf.keras.layers.Dropout(dropout))
 
-    # if i == 1:
-        # model = tf.keras.Sequential()
-        # model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        # model.add(tf.keras.layers.Dense(j, activation='relu'))
-        # model.add(tf.keras.layers.Dropout(k))
-        # model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        # model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        # history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        # history_dict = history.history
-        # return model, history_dict
+    if layers == 2:
 
-    if i == 2:
-        # model = tf.keras.Sequential()
-        # model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        # model.add(tf.keras.layers.Dense(j, activation='relu'))
-        # model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense((j / 2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        # model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        # model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        # history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        # history_dict = history.history
-        # return model, history_dict
+        model.add(tf.keras.layers.Dense((neurons / 2), activation='relu'))
+        model.add(tf.keras.layers.Dropout(dropout))
 
-    if i == 3:
-        # model = tf.keras.Sequential()
-        # model.add(tf.keras.layers.Flatten(input_shape=(30,)))
-        # model.add(tf.keras.layers.Dense(j, activation='relu'))
-        # model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense((j/2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        model.add(tf.keras.layers.Dense(((j/2)/2), activation='relu'))
-        model.add(tf.keras.layers.Dropout(k))
-        # model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-        # model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-        # history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
-        # history_dict = history.history
+    if layers == 3:
+
+        model.add(tf.keras.layers.Dense((neurons/2), activation='relu'))
+        model.add(tf.keras.layers.Dropout(dropout))
+        model.add(tf.keras.layers.Dense(((neurons/2)/2), activation='relu'))
+        model.add(tf.keras.layers.Dropout(dropout))
 
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -156,10 +132,7 @@ def getLogRegression(model, x_train, y_train):
 
 
 def sequencial_predict(X_test):
-    if models_path:
-        modelSequencial = tf.keras.models.load_model(models_path)
-        prediction = modelSequencial.predict(X_test)
-    else:
-        print('No model created to use for a prediction')
+    modelSequencial = tf.keras.models.load_model(MODELS_PATH)
+    prediction = modelSequencial.predict(X_test)
 
     return prediction
