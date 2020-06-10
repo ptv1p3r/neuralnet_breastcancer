@@ -158,22 +158,33 @@ def predict(data):
 
     result = [x.strip() for x in raw_text.split(',')]
 
-    # print(result)
     print('*' * 80)
     df = pd.DataFrame(result)
 
     # df = df.apply(pd.to_numeric)
-    df = df.astype(float)
+    # df = df.astype(float)
 
     print(df)
+
     # print(df.dtypes)
 
+    # X = df.values
     X = df.values
+
+    # X = np.insert(XX, 30)
+    print('teste')
 
     sc = StandardScaler()
     X = sc.fit_transform(X)
 
-    dff = pd.DataFrame(X)
+    print(X)
+    XX = []
+    print('tetetetetettet')
+    X = np.insert(X, 30, XX)
+    X = pd.DataFrame([X])
+    X = X.values
+    print(X)
+
     # X.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
     #               'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension', 'radius_se',
     #               'texture_se', 'perimeter_se', 'area_se', 'smoothness_se', 'compactness_se', 'concavity_se',
@@ -183,16 +194,14 @@ def predict(data):
 
     print('--' * 80)
     # X = np.array(X)
-    # print(X)
-    print(dff)
     print('')
-    # print(X_train[:1])
+    # print(X_TRAIN[:1])
 
     modelSequential = tf.keras.models.load_model(MODELS_PATH)
 
     # Avaliação do Modelo Sequencial
     print('')
-    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_VERBOSE_EVALUATE_VALUE)
+    loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_EVALUATE_BATCH_SIZE_VALUE)
     print("Test loss: ", loss)
     print("Test accuracy: ", acc)
 
@@ -209,11 +218,11 @@ def predict(data):
     print('')
     print('teste')
     print('M = 1 e B = 0')
-    pred = modelSequential.predict(X_TEST[:10])
-    # pred = modelSequential.predict_on_batch(X)
+    # pred = modelSequential.predict(X_TEST[:10])
+    pred = modelSequential.predict(X[:, ])
     print(pred)
     print()
-    print(Y_TEST)
+    # print(Y_TEST)
 
     print(pred.mean())
 
