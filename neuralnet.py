@@ -133,7 +133,7 @@ def acc_increase():
                 for neurons in np.arange(config.MIN_NEURONS, config.MAX_NEURONS, config.RATE_NEURONS):
                     for dropout in np.arange(config.MIN_DROPOUT, config.MAX_DROPOUT, config.RATE_DROPOUT):
                         modelSequential, history_dict = model_sequential_increase(X_TRAIN, Y_TRAIN, layers, neurons, dropout)
-                        loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=config.TRAINING_EVALUATE_VERBOSE_VALUE)
+                        loss, acc = modelSequential.evaluate(X_TEST, Y_TEST, verbose=0)
                         print('Current Try: ', config.INCREASE_ACC_ATTEMPTS)
                         config.INCREASE_ACC_ATTEMPTS += 1
         else:

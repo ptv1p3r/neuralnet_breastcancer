@@ -18,7 +18,7 @@ DATA_NAME = 'wdbc.data'
 MODELS_FOLDER = 'models'
 DATASET_FOLDER = 'dataset'
 
-#  Opções aplicadas ao nosso modelo e tratamento de dados
+# Opções aplicadas ao nosso modelo e tratamento de dados
 # Defenir se queremos baralhar os dados antes de fazer split para os dados de treino e dados de teste
 DO_SHUFFLE = False
 TEST_SIZE = 0.1
@@ -33,13 +33,13 @@ INCREASE_ACC_ATTEMPTS = 1
 INCREASE_ACC_MAX_ATTEMPTS = 200
 
 MIN_LAYERS = 1
-MAX_LAYERS = 3
+MAX_LAYERS = 4
 RATE_LAYERS = 1
 
 MIN_NEURONS = 15
-MAX_NEURONS = 30
+MAX_NEURONS = 65
 RATE_NEURONS = 5
 
 MIN_DROPOUT = 0.1
-MAX_DROPOUT = 0.5
+MAX_DROPOUT = 0.6
 RATE_DROPOUT = 0.1

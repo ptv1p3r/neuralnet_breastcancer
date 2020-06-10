@@ -8,6 +8,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 from config import *
 from utils  import structureCheck
+import math as math
 import numpy as np
 
 APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
@@ -58,7 +59,6 @@ def model_sequential(x_train, y_train):
     # isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
     # cada hiden layer é ativada pela afunção de ativação  'relu'
     model = tf.keras.Sequential()
-    # TODO: for 10 -  alterar numero de camadas entre 1 e 4 por ex, numero de nos entre 3 e 500 (Ex)
     model.add(tf.keras.layers.Flatten(input_shape=(30,)))
     model.add(tf.keras.layers.Dense(30, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.1))
@@ -82,27 +82,38 @@ def model_sequential(x_train, y_train):
 
 
 def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
-
+    print("Numero de Layers : ", layers)
+    print("Numero de Neuronios : ", neurons)
+    print("Numero de Dropout : ", dropout)
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(30,)))
     model.add(tf.keras.layers.Dense(neurons, activation='relu'))
     model.add(tf.keras.layers.Dropout(dropout))
 
     if layers == 2:
-
-        model.add(tf.keras.layers.Dense((neurons / 2), activation='relu'))
+        neurons = math.ceil((neurons / 2))
+        model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
+        print("Numero de Layers : ", layers)
+        print("Numero de Neuronios : ", neurons)
+        print("Numero de Dropout : ", dropout)
 
     if layers == 3:
-
-        model.add(tf.keras.layers.Dense((neurons/2), activation='relu'))
+        print("Numero de Layers : ", layers)
+        print("Numero de Neuronios : ", neurons)
+        print("Numero de Dropout : ", dropout)
+        model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
-        model.add(tf.keras.layers.Dense(((neurons/2)/2), activation='relu'))
+        neurons = math.ceil((neurons/2))
+        print("Numero de Layers : ", layers)
+        print("Numero de Neuronios : ", neurons)
+        print("Numero de Dropout : ", dropout)
+        model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
 
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    history = model.fit(x_train, y_train, epochs=15, validation_split=0.15, verbose=1)
+    history = model.fit(x_train, y_train, epochs=5, validation_split=0.15, verbose=1)
     history_dict = history.history
 
     return model, history_dict
