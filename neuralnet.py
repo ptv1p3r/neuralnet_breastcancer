@@ -13,7 +13,7 @@ from utils import structureCheck
 
 
 APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
-X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = dataset()
+X_TRAIN, X_TEST, Y_TRAIN, Y_TEST, X_ROW_TEST = dataset()
 
 
 def training():
@@ -163,7 +163,7 @@ def predict(data):
 
     # df = df.apply(pd.to_numeric)
     # df = df.astype(float)
-
+    # TODO: Precisa levar uma limpeza e meter isto bonito
     print(df)
 
     # print(df.dtypes)
@@ -174,8 +174,10 @@ def predict(data):
     # X = np.insert(XX, 30)
     print('teste')
 
-    sc = StandardScaler()
-    X = sc.fit_transform(X)
+    # sc = StandardScaler()
+    # X = sc.fit_transform(X)
+
+    # X = SCALER.fit_transform(X)
 
     print(X)
     XX = []
@@ -183,6 +185,19 @@ def predict(data):
     X = np.insert(X, 30, XX)
     X = pd.DataFrame([X])
     X = X.values
+    print(X)
+
+
+    print('imprime os dados row do teste')
+    print(X_ROW_TEST)
+
+    X = np.concatenate((X, X_ROW_TEST))
+    print('Array final')
+    print(X)
+
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+    print('Depois do escalamento')
     print(X)
 
     # X.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
@@ -219,11 +234,11 @@ def predict(data):
     print('teste')
     print('M = 1 e B = 0')
     # pred = modelSequential.predict(X_TEST[:10])
-    pred = modelSequential.predict(X[:, ])
+    pred = modelSequential.predict(X[:1])
     print(pred)
     print()
     # print(Y_TEST)
 
-    print(pred.mean())
+    print(pred[0].mean())
 
     print("Benigno" if pred.mean() <= 0.50 else "Maligno")

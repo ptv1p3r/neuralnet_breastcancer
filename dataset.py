@@ -133,10 +133,16 @@ def dataset():
 
     # Divide os dados em dados de teste e dados de treino usando o train_test_split do sklearn
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=TEST_SIZE, random_state=0)
+    X_row_test = X_test
 
     # Escala os dados para criar uma maior correlação entre eles
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
 
-    return X_train, X_test, Y_train, Y_test
+    # from sklearn import preprocessing
+    # scaler = preprocessing.MinMaxScaler()
+    # X_train = scaler.fit_transform(X_train)
+    # X_test = scaler.fit_transform(X_test)
+
+    return X_train, X_test, Y_train, Y_test, X_row_test
