@@ -7,7 +7,7 @@ from neuralnet import acc_increase, predict, training
 
 def main(argv):
     try:
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = LOGLEVEL  # or any {'0', '1', '2'}
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = LOGLEVEL
 
         opts, args = getopt.getopt(argv, "htip:", ["pstring="])
     except getopt.GetoptError as msg:
