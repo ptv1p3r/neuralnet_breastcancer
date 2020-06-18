@@ -32,8 +32,6 @@ def training():
         '###############################################################################################################')
     # TODO: Save a class model test (ver se é utilizavel ou eliminar depois)
 
-    # database_path = os.path.join(models_path, 'classModel.sav')
-    # joblib.dump(classMmodel, database_path)
     print(
         '---------------------------------------------------------------------------------------------------------------')
     modelSequential, history_dict = model_sequential(X_TRAIN, Y_TRAIN)
@@ -45,14 +43,6 @@ def training():
 
     # # Guardar o modelo feito
     modelSequential.save(MODELS_PATH) if not MODEL_EXISTS else None
-    # Apaga o modelo anterior para testar
-    # del modelSequential
-    #
-    # modelTest = tf.keras.models.load_model(models_path)
-
-    # loss, acc = modelTest.evaluate(X_TEST, Y_TEST, verbose=2)
-    # print("Test loss: ", loss)
-    # print("Test accuracy: ", acc)
 
     print(
         '---------------------------------------------------------------------------------------------------------------')
@@ -74,25 +64,11 @@ def training():
     # isto é a area a tracejado que aparece no grafico
 
     # AUC score of testing data
-    # TODO : nao se fazem imports a meio do codigo
-    # TODO : mais de 10 linhas de codigo, é funcao
 
     y_test_pred = modelSequential.predict(X_TEST)
     fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_TEST, y_test_pred)
     auc_keras = auc(fpr_keras, tpr_keras)
     print('Testing data AUC: ', auc_keras)
-
-    # ROC curve of testing data
-
-    # plt.figure(1)
-    # plt.plot([0, 1], [0, 1], 'k--')
-    # plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
-    # # plt.plot(fpr_rf, tpr_rf, label='RF (area = {:.3f})'.format(auc_rf))
-    # plt.xlabel('False positive rate')
-    # plt.ylabel('True positive rate')
-    # plt.title('ROC curve')
-    # plt.legend(loc='best')
-    # plt.show()
 
     # AUC score of training data
 
@@ -100,16 +76,6 @@ def training():
     fpr_keras, tpr_keras, thresholds_keras = roc_curve(Y_TRAIN, y_train_pred)
     auc_keras = auc(fpr_keras, tpr_keras)
     print('Training data AUC: ', auc_keras)
-
-    # ROC curve of training data
-    # plt.figure(1)
-    # plt.plot([0, 1], [0, 1], 'k--')
-    # plt.plot(fpr_keras, tpr_keras, label='Keras (area = {:.3f})'.format(auc_keras))
-    # plt.xlabel('False positive rate')
-    # plt.ylabel('True positive rate')
-    # plt.title('ROC curve')
-    # plt.legend(loc='best')
-    # plt.show()
 
     print('Take a batch of 10 examples from the training data and call model.predict on it.')
     example_batch = X_TRAIN[:10]
@@ -161,44 +127,22 @@ def predict(data):
     print('*' * 80)
     df = pd.DataFrame(result)
 
-    # df = df.apply(pd.to_numeric)
-    # df = df.astype(float)
     # TODO: Precisa levar uma limpeza e meter isto bonito
     print(df)
-
-    # print(df.dtypes)
-
-    # X = df.values
     X = df.values
-
-    # X = np.insert(XX, 30)
-    print('teste')
-
-    # sc = StandardScaler()
-    # X = sc.fit_transform(X)
-
-    # X = SCALER.fit_transform(X)
-
     print(X)
     XX = []
-    print('tetetetetettet')
     X = np.insert(X, 30, XX)
     X = pd.DataFrame([X])
     X = X.values
     print(X)
 
-
-    print('imprime os dados row do teste')
     print(X_ROW_TEST)
 
     X = np.concatenate((X, X_ROW_TEST))
-    print('Array final')
-    print(X)
 
     sc = StandardScaler()
     X = sc.fit_transform(X)
-    print('Depois do escalamento')
-    print(X)
 
     # X.columns = ['radius', 'texture', 'perimeter', 'area', 'smoothness',
     #               'compactness', 'concavity', 'concave_points', 'symmetry', 'fractal_dimension', 'radius_se',
@@ -208,9 +152,7 @@ def predict(data):
     #               'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst']
 
     print('--' * 80)
-    # X = np.array(X)
     print('')
-    # print(X_TRAIN[:1])
 
     modelSequential = tf.keras.models.load_model(MODELS_PATH)
 
@@ -229,15 +171,11 @@ def predict(data):
     auc_keras = auc(fpr_keras, tpr_keras)
     print('Training data AUC: ', auc_keras)
 
-    # TODO: Dividir o valor por 1000
     print('')
-    print('teste')
     print('M = 1 e B = 0')
-    # pred = modelSequential.predict(X_TEST[:10])
     pred = modelSequential.predict(X[:1])
     print(pred)
     print()
-    # print(Y_TEST)
 
     print(pred[0].mean())
 
