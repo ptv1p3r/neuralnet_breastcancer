@@ -3,15 +3,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
-# Outra maneira de receber as metricas dos modelos
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 from config import *
 from utils  import structureCheck
 import math as math
-import numpy as np
 
 APP_ROOT, DATASET_PATH, MODELS_PATH, MODEL_EXISTS, DATASET_FILE = structureCheck()
+
 
 def model_logistic_regression(x_train, y_train):
     # Logistic Regression
@@ -68,12 +67,7 @@ def model_sequential(x_train, y_train):
     model.add(tf.keras.layers.Dropout(0.1))
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
-    # optimizer = tf.keras.optimizers.Adam(lr=0.010)
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    # Pass several parameters to 'EarlyStopping' function and assign it to 'earlystopper'
-    # earlystopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=1,
-    #                                                 mode='auto')
-    # Fit model over 2000 iterations with 'earlystopper' callback, and assign it to history
     history = model.fit(x_train, y_train, epochs=50, validation_split=0.15, verbose=1)
 
     history_dict = history.history
@@ -82,9 +76,9 @@ def model_sequential(x_train, y_train):
 
 
 def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
-    print("Numero de Layers : ", layers)
-    print("Numero de Neuronios : ", neurons)
-    print("Numero de Dropout : ", dropout)
+    print("Layers : ", layers)
+    print("Neuronios : ", neurons)
+    print("Dropout : ", dropout)
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(30,)))
     model.add(tf.keras.layers.Dense(neurons, activation='relu'))
@@ -94,20 +88,20 @@ def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
         neurons = math.ceil((neurons / 2))
         model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
-        print("Numero de Layers : ", layers)
-        print("Numero de Neuronios : ", neurons)
-        print("Numero de Dropout : ", dropout)
+        print("Layers : ", layers)
+        print("Neuronios : ", neurons)
+        print("Dropout : ", dropout)
 
     if layers == 3:
-        print("Numero de Layers : ", layers)
-        print("Numero de Neuronios : ", neurons)
-        print("Numero de Dropout : ", dropout)
+        print("Layers : ", layers)
+        print("Neuronios : ", neurons)
+        print("Dropout : ", dropout)
         model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
         neurons = math.ceil((neurons/2))
-        print("Numero de Layers : ", layers)
-        print("Numero de Neuronios : ", neurons)
-        print("Numero de Dropout : ", dropout)
+        print("Layers : ", layers)
+        print("Neuronios : ", neurons)
+        print("Dropout : ", dropout)
         model.add(tf.keras.layers.Dense(neurons, activation='relu'))
         model.add(tf.keras.layers.Dropout(dropout))
 
