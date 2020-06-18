@@ -5,7 +5,7 @@
 # '3' 'ERROR' Filter out all messages
 LOGLEVEL = '3'
 DEBUG = False
-PLOT_GRAPHICS = False
+PLOT_GRAPHICS = True
 DATA_URI = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
 DATA_NAME = 'wdbc.data'
 MODELS_FOLDER = 'models'
