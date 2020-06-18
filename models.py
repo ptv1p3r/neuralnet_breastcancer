@@ -58,7 +58,7 @@ def model_sequential(x_train, y_train):
     # isto conecta a uma unica hiden layer de 15 neuronios escolhidos ao calhas
     # cada hiden layer é ativada pela afunção de ativação  'relu'
     model = tf.keras.Sequential()
-    model.add(tf.keras.layers.Flatten(input_shape=(30,)))
+    model.add(tf.keras.layers.Flatten(input_shape=(LAYERS_INPUT_SHAPE,)))
     model.add(tf.keras.layers.Dense(30, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.1))
     model.add(tf.keras.layers.Dense(20, activation='relu'))
@@ -68,7 +68,7 @@ def model_sequential(x_train, y_train):
     # isto tudo conecta a uma unica layer de 1 neuronio que tem a função de ativação sigmoid apliacada
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    history = model.fit(x_train, y_train, epochs=50, validation_split=0.15, verbose=1)
+    history = model.fit(x_train, y_train, epochs=EPOC_SEQUENCIAL, validation_split=SEQUENCIAL_VALIDATION_SPLIT, verbose=1)
 
     history_dict = history.history
 
@@ -80,7 +80,7 @@ def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
     print("Neuronios : ", neurons)
     print("Dropout : ", dropout)
     model = tf.keras.Sequential()
-    model.add(tf.keras.layers.Flatten(input_shape=(30,)))
+    model.add(tf.keras.layers.Flatten(input_shape=(LAYERS_INPUT_SHAPE,)))
     model.add(tf.keras.layers.Dense(neurons, activation='relu'))
     model.add(tf.keras.layers.Dropout(dropout))
 
@@ -107,7 +107,7 @@ def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
 
     model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    history = model.fit(x_train, y_train, epochs=5, validation_split=0.15, verbose=1)
+    history = model.fit(x_train, y_train, epochs=EPOC_SEQUENCIAL_INCREASE, validation_split=SEQUENCIAL_INCREASE_VALIDATION_SPLIT, verbose=1)
     history_dict = history.history
 
     return model, history_dict
