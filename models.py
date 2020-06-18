@@ -115,7 +115,6 @@ def model_sequential_increase(x_train, y_train, layers, neurons, dropout):
 
 def getAccuracy(model, x_train, y_train):
     print('')
-    # teste da accuracy do model no data test com a confusion matrix
     # [TP][FP]
     # [FN][TN]
     cm = confusion_matrix(y_train, model.predict(x_train))
